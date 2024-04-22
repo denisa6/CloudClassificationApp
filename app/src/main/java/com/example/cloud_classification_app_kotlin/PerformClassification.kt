@@ -2,13 +2,17 @@ package com.example.cloud_classification_app_kotlin
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.cloud_classification_app_kotlin.ml.Mobilenetv3small
@@ -17,15 +21,24 @@ import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.io.File
+import java.net.URL
 
 class PerformClassification : AppCompatActivity() {
-    lateinit var selectBtn: Button
-    lateinit var predictBtn: Button
-    lateinit var backBtn: Button
-    lateinit var resView: TextView
-    lateinit var imageView: ImageView
-    lateinit var bitmap: Bitmap
-    lateinit var modelName: String
+    private lateinit var selectBtn: Button
+    private lateinit var takePictureBtn: Button
+    private lateinit var predictBtn: Button
+    private lateinit var backBtn: Button
+    private lateinit var resView: TextView
+    private lateinit var imageView: ImageView
+    private lateinit var bitmap: Bitmap
+    private lateinit var modelName: String
+    private lateinit var imageURL: Uri
+
+    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
+        bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageURL)
+        imageView.setImageBitmap(bitmap)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +50,12 @@ class PerformClassification : AppCompatActivity() {
             insets
         }
 
+        imageURL = createImageUri()
+
         modelName = intent.getStringExtra("modelName") ?: ""
 
         selectBtn = findViewById(R.id.selectBtn)
+        takePictureBtn = findViewById(R.id.takePictureBtn)
         predictBtn = findViewById(R.id.predictBtn)
         backBtn = findViewById(R.id.backBtn)
         resView = findViewById(R.id.resultView)
@@ -65,6 +81,10 @@ class PerformClassification : AppCompatActivity() {
             intent.setAction(Intent.ACTION_GET_CONTENT)
             intent.setType("image/*")
             startActivityForResult(intent, 100)
+        }
+
+        takePictureBtn.setOnClickListener {
+            contract.launch(imageURL)
         }
 
         predictBtn.setOnClickListener {
@@ -111,5 +131,12 @@ class PerformClassification : AppCompatActivity() {
             bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
             imageView.setImageBitmap(bitmap)
         }
+    }
+
+    private fun createImageUri(): Uri{
+        val image = File(filesDir, "camera_photos")
+        return FileProvider.getUriForFile(this,
+            "com.example.cloud_classification_app_kotlin.FileProvider",
+            image)
     }
 }

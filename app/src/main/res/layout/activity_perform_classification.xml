@@ -32,6 +32,11 @@ tools:context=".PerformClassification">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="take picture"
+        android:id="@+id/takePictureBtn"></Button>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="predict"
         android:id="@+id/predictBtn"></Button>
 </LinearLayout>
