@@ -51,9 +51,7 @@ class PerformClassification : AppCompatActivity() {
         }
 
         imageURL = createImageUri()
-
         modelName = intent.getStringExtra("modelName") ?: ""
-
         selectBtn = findViewById(R.id.selectBtn)
         takePictureBtn = findViewById(R.id.takePictureBtn)
         predictBtn = findViewById(R.id.predictBtn)
@@ -88,38 +86,37 @@ class PerformClassification : AppCompatActivity() {
         }
 
         predictBtn.setOnClickListener {
-            if (modelName == "ResNet50"){
+            if (::bitmap.isInitialized){
+                if (modelName == "ResNet50"){
+                } else if (modelName == "MobileNetV3Small"){
+                    var tensorImage = TensorImage(DataType.FLOAT32)
+                    tensorImage.load(bitmap)
 
-            }else if (modelName == "MobileNetV3Small"){
-                var tensorImage = TensorImage(DataType.FLOAT32)
-                tensorImage.load(bitmap)
+                    // use image processor
+                    tensorImage = imageProcessor.process(tensorImage)
 
-                // use image processor
-                tensorImage = imageProcessor.process(tensorImage)
+                    val model = Mobilenetv3small.newInstance(this)
 
-                val model = Mobilenetv3small.newInstance(this)
+                    // Creates inputs for reference.
+                    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
+                    inputFeature0.loadBuffer(tensorImage.buffer)
 
-                // Creates inputs for reference.
-                val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
-                inputFeature0.loadBuffer(tensorImage.buffer)
+                    // Runs model inference and gets result.
+                    val outputs = model.process(inputFeature0)
+                    val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray
 
-                // Runs model inference and gets result.
-                val outputs = model.process(inputFeature0)
-                val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray
-
-                var maxIdx = 0
-                outputFeature0.forEachIndexed { index, fl ->
-                    if (outputFeature0[maxIdx] < fl){
-                        maxIdx = index
+                    var maxIdx = 0
+                    outputFeature0.forEachIndexed { index, fl ->
+                        if (outputFeature0[maxIdx] < fl){
+                            maxIdx = index
+                        }
                     }
-                }
 
-                resView.setText(labels[maxIdx])
+                    resView.setText(labels[maxIdx])
 
-                // Releases model resources if no longer used.
-                model.close()
-            } else if (modelName == "EfficientNetV2B0"){
-
+                    // Releases model resources if no longer used.
+                    model.close()
+                } else if (modelName == "EfficientNetV2B0"){}
             }
         }
     }
