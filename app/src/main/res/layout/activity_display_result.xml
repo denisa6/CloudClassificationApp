@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DisplayResult">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/displayToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/imageDisplayView"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
+        />
+
+    <TextView
+        android:id="@+id/resultView"
+        android:layout_width="350dp"
+        android:layout_height="30dp"
+        android:background="?attr/colorPrimary"
+        android:layout_below="@+id/imageDisplayView"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="25dp"
+        android:textAlignment="center"></TextView>
+
+    <TextView
+        android:id="@+id/descriptionView"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/resultView"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"></TextView>
+
+</RelativeLayout>

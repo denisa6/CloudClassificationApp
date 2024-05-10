@@ -9,23 +9,37 @@
     android:gravity="center"
     tools:context=".ChooseModel">
 
+    <TextView
+        android:id="@+id/titleView"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/linLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="50dp"
+        android:text="Cloud Classification App"
+        android:textAlignment="center"
+        android:textSize="50dp"></TextView>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ResNet50"
         android:id="@+id/ResNet50Btn"
-        android:layout_marginBottom="100px"></Button>
+        android:layout_marginBottom="100px"
+        android:textColor="@color/white"></Button>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="MobileNetV3Small"
         android:id="@+id/MobileNetV3SmallBtn"
-        android:layout_marginBottom="100px"></Button>
+        android:layout_marginBottom="100px"
+        android:textColor="@color/white"></Button>
     <Button
         android:id="@+id/EfficientNetV2B0Btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="EfficientNetV2B0"
-        android:layout_marginBottom="100px"></Button>
+        android:layout_marginBottom="100px"
+        android:textColor="@color/white"></Button>
 
 </LinearLayout>

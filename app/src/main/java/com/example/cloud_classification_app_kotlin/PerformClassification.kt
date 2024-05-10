@@ -21,6 +21,7 @@ import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.URL
 
@@ -28,8 +29,6 @@ class PerformClassification : AppCompatActivity() {
     private lateinit var selectBtn: Button
     private lateinit var takePictureBtn: Button
     private lateinit var predictBtn: Button
-    private lateinit var backBtn: Button
-    private lateinit var resView: TextView
     private lateinit var imageView: ImageView
     private lateinit var bitmap: Bitmap
     private lateinit var modelName: String
@@ -55,11 +54,11 @@ class PerformClassification : AppCompatActivity() {
         selectBtn = findViewById(R.id.selectBtn)
         takePictureBtn = findViewById(R.id.takePictureBtn)
         predictBtn = findViewById(R.id.predictBtn)
-        backBtn = findViewById(R.id.backBtn)
-        resView = findViewById(R.id.resultView)
         imageView = findViewById(R.id.imageView)
 
-        resView.setText(modelName)
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar?.title = modelName // Set the title
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         var labels = application.assets.open("labels.txt").bufferedReader().readLines()
 
@@ -68,11 +67,6 @@ class PerformClassification : AppCompatActivity() {
             .Builder()
             .add(ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR))
             .build()
-
-        backBtn.setOnClickListener {
-            val intent = Intent(this, ChooseModel::class.java)
-            startActivity(intent)
-        }
 
         selectBtn.setOnClickListener{
             var intent = Intent()
@@ -112,10 +106,16 @@ class PerformClassification : AppCompatActivity() {
                         }
                     }
 
-                    resView.setText(labels[maxIdx])
+                    //resView.setText(labels[maxIdx])
 
                     // Releases model resources if no longer used.
                     model.close()
+
+                    val intent = Intent(this, DisplayResult::class.java)
+                    intent.putExtra("cloudType", labels[maxIdx])
+
+                    startActivity(intent)
+
                 } else if (modelName == "EfficientNetV2B0"){}
             }
         }

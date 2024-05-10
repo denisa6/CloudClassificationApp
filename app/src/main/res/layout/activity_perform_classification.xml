@@ -6,49 +6,54 @@ android:id="@+id/main"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".PerformClassification">
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back"
-        android:id="@+id/backBtn"></Button>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="100dp"
-        android:background="@color/white" />
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
+         />
+
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/linLayout"
+    android:orientation="vertical"
+    android:layout_marginTop="25dp"
     android:layout_centerHorizontal="true"
     android:layout_below="@+id/imageView">
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="select image"
-        android:id="@+id/selectBtn"></Button>
+        android:id="@+id/selectBtn"
+        android:textColor="@color/white"></Button>
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="take picture"
-        android:id="@+id/takePictureBtn"></Button>
+        android:layout_marginTop="25dp"
+        android:id="@+id/takePictureBtn"
+        android:textColor="@color/white"></Button>
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="predict"
-        android:id="@+id/predictBtn"></Button>
+        android:layout_marginTop="25dp"
+        android:id="@+id/predictBtn"
+        android:textColor="@color/white"></Button>
 </LinearLayout>
-
-    <TextView
-        android:id="@+id/resultView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linLayout"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:text="prediction"
-        android:textSize="20dp"></TextView>
 
 </RelativeLayout>
