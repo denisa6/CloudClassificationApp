@@ -1,5 +1,6 @@
 package com.example.cloud_classification_app_kotlin
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -7,8 +8,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -16,14 +15,13 @@ import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.cloud_classification_app_kotlin.ml.Mobilenetv3small
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.net.URL
 
 class PerformClassification : AppCompatActivity() {
     private lateinit var selectBtn: Button
@@ -61,6 +59,7 @@ class PerformClassification : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         var labels = application.assets.open("labels.txt").bufferedReader().readLines()
+        var descriptions = application.assets.open("descriptions.txt").bufferedReader().readLines()
 
         // image processor? - maybe not needed
         var imageProcessor = ImageProcessor
@@ -82,6 +81,7 @@ class PerformClassification : AppCompatActivity() {
         predictBtn.setOnClickListener {
             if (::bitmap.isInitialized){
                 if (modelName == "ResNet50"){
+                    showMaterialAlert(this, "Alert", "This is an alert message")
                 } else if (modelName == "MobileNetV3Small"){
                     var tensorImage = TensorImage(DataType.FLOAT32)
                     tensorImage.load(bitmap)
@@ -111,10 +111,7 @@ class PerformClassification : AppCompatActivity() {
                     // Releases model resources if no longer used.
                     model.close()
 
-                    val intent = Intent(this, DisplayResult::class.java)
-                    intent.putExtra("cloudType", labels[maxIdx])
-
-                    startActivity(intent)
+                    showMaterialAlert(this, labels[maxIdx], descriptions[maxIdx])
 
                 } else if (modelName == "EfficientNetV2B0"){}
             }
@@ -135,5 +132,15 @@ class PerformClassification : AppCompatActivity() {
         return FileProvider.getUriForFile(this,
             "com.example.cloud_classification_app_kotlin.FileProvider",
             image)
+    }
+
+    fun showMaterialAlert(context: Context, title: String, message: String) {
+        MaterialAlertDialogBuilder(context)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }

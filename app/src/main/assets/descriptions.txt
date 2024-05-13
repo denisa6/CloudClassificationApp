@@ -1,0 +1,11 @@
+Altocumulus cloud
+Altostratus cloud
+Cumulonimbus cloud
+Cirrocumulus cloud
+Cirrus cloud
+Cirrostratus cloud
+Contrails cloud
+Cumulus cloud
+Nimbostratus cloud
+Stratocumulus cloud
+Stratus cloud

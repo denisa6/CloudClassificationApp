@@ -13,10 +13,6 @@
         android:theme="@style/Theme.Cloud_classification_app_kotlin"
         tools:targetApi="31">
         <activity
-            android:name=".DisplayResult"
-            android:exported="false"
-            android:parentActivityName=".PerformClassification"/>
-        <activity
             android:name=".PerformClassification"
             android:exported="false"
             android:parentActivityName=".ChooseModel" />
