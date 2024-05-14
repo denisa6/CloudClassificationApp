@@ -1,11 +1,11 @@
-Altocumulus cloud
-Altostratus cloud
-Cumulonimbus cloud
-Cirrocumulus cloud
-Cirrus cloud
-Cirrostratus cloud
-Contrails cloud
-Cumulus cloud
-Nimbostratus cloud
-Stratocumulus cloud
-Stratus cloud
+Generally observed in settled weather, rarely producing precipitation.
+Can lead to rain or snowfall as they deepen and thicken, often associated with warm or obstructed fronts.
+Associated with severe weather events such as thunderstorms, lightning, hail, and heavy downpours, as well as tornadoes.
+Linked to sunny skies, but their appearance may precede inclement weather.
+Typically indicates fair weather, but their presence ahead of a warm front signals an impending weather change.
+Often precedes warm fronts and may indicate the onset of precipitation within the next 6-24 hours.
+Formed by aircraft engine exhaust, condensation trails are often seen in clear skies. They don't directly affect ground weather.
+Typically denotes fair weather, but can develop into larger cloud formations that produce rain.
+Produces steady rain or snow, associated with frontal systems and mid-latitude cyclones.
+Occur in a variety of weather scenarios, rarely producing heavy precipitation.
+May lead to drizzle or light snowfall, often seen in overcast, gloomy conditions.
