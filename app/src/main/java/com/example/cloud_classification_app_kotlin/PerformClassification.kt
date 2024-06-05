@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.cloud_classification_app_kotlin.ml.Efficientnetv2b0
 import com.example.cloud_classification_app_kotlin.ml.Mobilenetv3small
+import com.example.cloud_classification_app_kotlin.ml.Resnet50Quantized
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.image.ImageProcessor
@@ -81,7 +83,33 @@ class PerformClassification : AppCompatActivity() {
         predictBtn.setOnClickListener {
             if (::bitmap.isInitialized){
                 if (modelName == "ResNet50"){
-                    showMaterialAlert(this, "Alert", "This is an alert message")
+                    var tensorImage = TensorImage(DataType.FLOAT32)
+                    tensorImage.load(bitmap)
+
+                    // use image processor
+                    tensorImage = imageProcessor.process(tensorImage)
+
+                    val model = Resnet50Quantized.newInstance(this)
+
+                    // Creates inputs for reference.
+                    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
+                    inputFeature0.loadBuffer(tensorImage.buffer)
+
+                    // Runs model inference and gets result.
+                    val outputs = model.process(inputFeature0)
+                    val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray
+
+                    var maxIdx = 0
+                    outputFeature0.forEachIndexed { index, fl ->
+                        if (outputFeature0[maxIdx] < fl){
+                            maxIdx = index
+                        }
+                    }
+
+                    // Releases model resources if no longer used.
+                    model.close()
+
+                    showMaterialAlert(this, labels[maxIdx], descriptions[maxIdx])
                 } else if (modelName == "MobileNetV3Small"){
                     var tensorImage = TensorImage(DataType.FLOAT32)
                     tensorImage.load(bitmap)
@@ -106,14 +134,40 @@ class PerformClassification : AppCompatActivity() {
                         }
                     }
 
-                    //resView.setText(labels[maxIdx])
-
                     // Releases model resources if no longer used.
                     model.close()
 
                     showMaterialAlert(this, labels[maxIdx], descriptions[maxIdx])
 
-                } else if (modelName == "EfficientNetV2B0"){}
+                } else if (modelName == "EfficientNetV2B0"){
+                    var tensorImage = TensorImage(DataType.FLOAT32)
+                    tensorImage.load(bitmap)
+
+                    // use image processor
+                    tensorImage = imageProcessor.process(tensorImage)
+
+                    val model = Efficientnetv2b0.newInstance(this)
+
+                    // Creates inputs for reference.
+                    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
+                    inputFeature0.loadBuffer(tensorImage.buffer)
+
+                    // Runs model inference and gets result.
+                    val outputs = model.process(inputFeature0)
+                    val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray
+
+                    var maxIdx = 0
+                    outputFeature0.forEachIndexed { index, fl ->
+                        if (outputFeature0[maxIdx] < fl){
+                            maxIdx = index
+                        }
+                    }
+
+                    // Releases model resources if no longer used.
+                    model.close()
+
+                    showMaterialAlert(this, labels[maxIdx], descriptions[maxIdx])
+                }
             }
         }
     }
