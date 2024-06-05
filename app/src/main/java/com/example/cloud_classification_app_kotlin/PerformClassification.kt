@@ -35,10 +35,12 @@ class PerformClassification : AppCompatActivity() {
     private lateinit var imageURL: Uri
 
     // Activity result contract for taking a picture
-    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()) {
-        // Retrieve the captured image and display it in the ImageView
-        bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageURL)
-        imageView.setImageBitmap(bitmap)
+    private val contract = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        // Check if the bitmap is null (user canceled the action)
+        if (bitmap != null) {
+            this.bitmap = bitmap
+            imageView.setImageBitmap(bitmap)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +68,7 @@ class PerformClassification : AppCompatActivity() {
 
         // Set up button click listeners
         selectBtn.setOnClickListener { selectImageFromGallery() }
-        takePictureBtn.setOnClickListener { contract.launch(imageURL) }
+        takePictureBtn.setOnClickListener { contract.launch(null) }
         predictBtn.setOnClickListener { predictImage(labels, descriptions, imageProcessor) }
     }
 
@@ -154,7 +156,7 @@ class PerformClassification : AppCompatActivity() {
     // Handles the result from the image selection activity
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100) {
+        if (requestCode == 100 && resultCode == RESULT_OK) {
             val uri = data?.data ?: return
             bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
             imageView.setImageBitmap(bitmap)
